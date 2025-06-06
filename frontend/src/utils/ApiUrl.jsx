@@ -1,0 +1,1 @@
+export const url = "https://retoolapi.dev/vmJ8AL/peliculas";
