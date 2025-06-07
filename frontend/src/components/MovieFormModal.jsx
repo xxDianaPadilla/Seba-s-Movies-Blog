@@ -2,20 +2,36 @@ import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { X, Film, Save, Star } from "lucide-react";
 
+/**
+ * Componente MovieFormModal - Modal para crear/editar películas
+ * 
+ * Props:
+ * - isOpen: Boolean que controla si el modal está abierto
+ * - onClose: Función callback para cerrar el modal
+ * - onSubmit: Función callback para manejar el envío del formulario
+ * - editingMovie: Objeto con datos de película a editar (null para crear nueva)
+ */
+
 const MovieFormModal = ({
     isOpen,
     onClose,
     onSubmit,
     editingMovie = null
 }) => {
+
+    /**
+     * MÓDULO: Configuración de React Hook Form
+     * Maneja el estado del formulario, validaciones y envío
+     */
+
     const {
-        register,
-        handleSubmit,
-        control,
-        formState: { errors, isSubmitting },
-        reset,
-        setValue,
-        watch
+        register, // Registrar campos del formulario
+        handleSubmit, // Manejar envío del formulario
+        control, // Control para campos personalizados
+        formState: { errors, isSubmitting }, // Estado del formulario
+        reset, // Resetear formulario
+        setValue, // Establecer valores programáticamente
+        watch // Observar cambios en campos específicos
     } = useForm({
         defaultValues: {
             titulo: '',
@@ -26,7 +42,13 @@ const MovieFormModal = ({
         }
     });
 
+    // Observar cambios en el campo calificación para renderizado dinámico
     const calificacionValue = watch('calificacion');
+
+    /**
+     * MÓDULO: Definición de géneros disponibles
+     * Array estático con opciones de género cinematográfico
+     */
 
     const generos = [
         'Accion',
@@ -39,9 +61,16 @@ const MovieFormModal = ({
         'Animacion'
     ];
 
+    /**
+     * MÓDULO: Efecto para manejo de datos de edición
+     * Se ejecuta cuando cambia isOpen o editingMovie
+     * Popula el formulario con datos existentes o limpia para nueva entrada
+     */
+
     useEffect(() => {
         if (isOpen) {
             if (editingMovie) {
+                // Modo edición: cargar datos existentes
                 reset({
                     titulo: editingMovie.titulo || '',
                     anio: editingMovie.anio || '',
@@ -50,6 +79,7 @@ const MovieFormModal = ({
                     calificacion: editingMovie.calificacion || 1
                 });
             } else {
+                // Modo creación: formulario limpio
                 reset({
                     titulo: '',
                     anio: '',
@@ -60,6 +90,11 @@ const MovieFormModal = ({
             }
         }
     }, [isOpen, editingMovie, reset]);
+
+    /**
+     * MÓDULO: Reglas de validación del formulario
+     * Define validaciones específicas para cada campo
+     */
 
     const validationRules = {
         titulo: {
@@ -109,39 +144,51 @@ const MovieFormModal = ({
         }
     };
 
+    /**
+     * MÓDULO: Manejo del envío del formulario
+     * Procesa los datos, los formatea y ejecuta callback del padre
+     */
+
     const onFormSubmit = async (data) => {
         try {
+            // Formatear datos: convertir strings a números donde sea necesario
             const formattedData = {
                 ...data,
                 anio: parseInt(data.anio),
                 calificacion: parseInt(data.calificacion)
             };
 
-            await onSubmit(formattedData);
-            onClose();
+            await onSubmit(formattedData); // Ejecutar callback del componente padre
+            onClose(); // Cerrar modal después del envío exitoso
         } catch (error) {
             console.error('Error al enviar formulario: ', error);
         }
     };
+
+    /**
+     * MÓDULO: Renderizado interactivo de estrellas para calificación
+     * Genera 5 estrellas clickeables que actualiza el valor de calificación
+     */
 
     const renderStars = (currentRating) => {
         return [...Array(5)].map((_, index) => (
             <button
                 key={index}
                 type="button"
-                onClick={() => setValue('calificacion', index + 1)}
+                onClick={() => setValue('calificacion', index + 1)} // Actualizar calificación
                 className="focus:outline-none focus:ring-2 focus:ring-purple-500 rounded"
             >
                 <Star
                     className={`w-6 h-6 transition-colors ${index < currentRating
-                        ? 'text-yellow-400 fill-current hover:text-yellow-500'
-                        : 'text-gray-300 hover:text-gray-400'
+                        ? 'text-yellow-400 fill-current hover:text-yellow-500' // Estrella activa
+                        : 'text-gray-300 hover:text-gray-400'  // Estrella inactiva
                         }`}
                 />
             </button>
         ));
     };
 
+    // Renderizado condicional: no mostrar si el modal está cerrado
     if (!isOpen) return null;
 
     return (

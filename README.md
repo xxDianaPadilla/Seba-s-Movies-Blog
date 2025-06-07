@@ -117,6 +117,6 @@ npm run lint
   </ul>
   </code></pre>
 
-  <h2 class="emoji">📄 Licencia</h2>
+  <h2 class="emoji">💖 Contribución</h2>
 
   <p><strong>¡Disfruta organizando tu colección de películas! 🍿</strong></p>

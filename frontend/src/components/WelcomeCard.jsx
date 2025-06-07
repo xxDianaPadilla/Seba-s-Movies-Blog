@@ -3,17 +3,45 @@ import { useNavigate } from 'react-router-dom';
 import { Film, Star, Play, ArrowRight, Popcorn, Calendar, BookOpen } from 'lucide-react';
 import { useDashboardAccess } from "../context/AuthContext";
 
+/**
+ * COMPONENTE: WelcomeCard - Tarjeta de bienvenida y punto de entrada a la aplicación
+ * 
+ * Funcionalidades:
+ * - Presenta la aplicación al usuario
+ * - Maneja la navegación controlada al dashboard
+ * - Gestiona permisos de acceso a través del contexto de autenticación
+ */
+
 const WelcomeCard = () => {
+
+    // Hook de navegación de React Router
     const navigate = useNavigate();
+
+    /**
+     * MÓDULO: Gestión de acceso al dashboard
+     * Extrae funciones del contexto de autenticación para controlar el acceso
+     */
+
     const { allowDashboardAccess, revokeDashboardAccess } = useDashboardAccess();
 
+    /**
+     * MÓDULO: Revocación automática de acceso al montar componente
+     * Asegura que el usuario pase por el flujo de bienvenida antes de acceder al dashboard
+     */
+
     React.useEffect(() => {
-        revokeDashboardAccess();
-    }, []);
+        revokeDashboardAccess(); // Revocar acceso automáticamente al cargar la página
+    }, []); // Array de dependencias vacío = solo ejecuta al montar
+
+    /**
+     * MÓDULO: Navegación controlada al dashboard
+     * Maneja la secuencia: otorgar acceso → navegar al dashboard
+     */
 
     const handleNavigateToDashboard = () => {
-        allowDashboardAccess();
-        // Usar setTimeout para asegurar que el estado se actualice antes de navegar
+        allowDashboardAccess(); // Otorgar permiso de acceso
+        // setTimeout con delay 0: Permite que el estado se actualice completamente
+        // antes de ejecutar la navegación (evita race conditions)
         setTimeout(() => {
             navigate('/dashboard');
         }, 0);

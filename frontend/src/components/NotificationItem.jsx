@@ -1,21 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import { X, Film } from 'lucide-react';
 
-// Componente individual de notificación
+/**
+ * COMPONENTE: NotificationItem - Elemento individual de notificación
+ * 
+ * Props:
+ * - notification: Objeto con datos de la notificación (id, type, title, message, timestamp, icon)
+ * - onRemove: Función callback para eliminar la notificación
+ */
+
 const NotificationItem = ({ notification, onRemove }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [isLeaving, setIsLeaving] = useState(false);
+
+  // Estados para control de animaciones
+  const [isVisible, setIsVisible] = useState(false); // Control de animación de entrada
+  const [isLeaving, setIsLeaving] = useState(false); // Control de animación de salida
+
+  /**
+   * MÓDULO: Animación de entrada automática
+   * Ejecuta la animación de entrada con un pequeño delay para suavidad
+   */
 
   useEffect(() => {
-    // Trigger entrance animation
+    // Delay de 50ms para permitir que el DOM se actualice antes de animar
     const timer = setTimeout(() => setIsVisible(true), 50);
-    return () => clearTimeout(timer);
+    return () => clearTimeout(timer); // Cleanup del timer
   }, []);
 
+  /**
+   * MÓDULO: Manejo de eliminación con animación
+   * Coordina la animación de salida antes de eliminar la notificación
+   */
+
   const handleRemove = () => {
-    setIsLeaving(true);
+    setIsLeaving(true); // Activar animación de salida
+     // Esperar 300ms para que termine la animación antes
     setTimeout(() => onRemove(notification.id), 300);
   };
+
+  /**
+   * MÓDULO: Sistema de estilos por tipo de notificación
+   * Retorna clases CSS específicas según el tipo de notificación
+   */
 
   const getNotificationStyles = () => {
     const baseStyles = "relative overflow-hidden backdrop-blur-sm border shadow-lg";
@@ -34,6 +59,11 @@ const NotificationItem = ({ notification, onRemove }) => {
     }
   };
 
+  /**
+   * MÓDULO: Colores de iconos por tipo
+   * Asigna colores específicos a los iconos según el tipo de notificación
+   */
+
   const getIconColor = () => {
     switch (notification.type) {
       case 'success':
@@ -48,6 +78,11 @@ const NotificationItem = ({ notification, onRemove }) => {
         return 'text-gray-500';
     }
   };
+
+  /**
+   * MÓDULO: Colores de barra de progreso por tipo
+   * Define el color de la barra de progreso animada según el tipo
+   */
 
   const getProgressBarColor = () => {
     switch (notification.type) {
@@ -64,6 +99,7 @@ const NotificationItem = ({ notification, onRemove }) => {
     }
   };
 
+  // Componente de icono dinámico basado en la notificación
   const IconComponent = notification.icon;
 
   return (

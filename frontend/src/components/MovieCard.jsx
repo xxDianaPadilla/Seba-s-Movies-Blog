@@ -1,40 +1,73 @@
 import React, { useState } from "react";
 import { Star, Calendar, User, Tag, Edit, Trash2, MoreVertical } from 'lucide-react';
 
+/**
+ * Componente MovieCard - Tarjeta individual para mostrar información de películas
+ * 
+ * Props:
+ * - movie: Objeto con datos de la película (titulo, anio, calificacion, genero, director, id)
+ * - onEdit: Función callback para editar película
+ * - onDelete: Función callback para eliminar película
+ */
+
 const MovieCard = ({ movie, onEdit, onDelete }) => {
-    const [showMenu, setShowMenu] = useState(false);
-    const [isDeleting, setIsDeleting] = useState(false);
+
+    // Estados locales del componente
+    const [showMenu, setShowMenu] = useState(false); // Control del menú desplegable
+    const [isDeleting, setIsDeleting] = useState(false);// Estado de carga durante eliminación
+
+    /**
+     * MÓDULO: Manejo de eliminación de película
+     * Incluye confirmación del usuario y manejo de estados de carga
+     */
 
     const handleDelete = async () => {
+
+        // Confirmación antes de eliminar
         if (window.confirm(`¿Estás seguro de que quieres eliminar "${movie.titulo}"?`)) {
-            setIsDeleting(true);
+            setIsDeleting(true); // Activar estado de carga
             try {
-                await onDelete(movie.id);
+                await onDelete(movie.id); // Llamar función de eliminación del padre
             } catch (error) {
                 console.error('Error al eliminar: ', error);
             } finally {
-                setIsDeleting(false);
+                setIsDeleting(false); // Desactivar estado de carga
             }
         }
-        setShowMenu(false);
+        setShowMenu(false); // Cerrar menú después de la acción
     };
 
+    /**
+     * MÓDULO: Manejo de edición de película
+     * Ejecuta callback y cierra el menú
+     */
+
     const handleEdit = () => {
-        onEdit(movie);
-        setShowMenu(false);
+        onEdit(movie); // Llamar función de edición del padre
+        setShowMenu(false); // Cerrar menú después de la acción
     };
+
+    /**
+     * MÓDULO: Renderizado de estrellas para calificación
+     * Genera 5 estrellas, rellenando según la calificación
+     */
 
     const renderStars = (rating) => {
         return [...Array(5)].map((_, index) => (
             <Star
                 key={index}
                 className={`w-4 h-4 ${index < rating
-                    ? 'text-yellow-400 fill-current'
-                    : 'text-gray-300'
+                    ? 'text-yellow-400 fill-current' // Estrella llena
+                    : 'text-gray-300' // Estrella vacía
                     }`}
             />
         ));
     };
+
+    /**
+     * MÓDULO: Sistema de colores por género
+     * Asigna colores específicos a cada género cinematográfico
+     */
 
     const getGenreColor = (genre) => {
         const colors = {
@@ -47,7 +80,7 @@ const MovieCard = ({ movie, onEdit, onDelete }) => {
             'Aventura': 'bg-orange-100 text-orange-800',
             'Animacion': 'bg-indigo-100 text-indigo-800',
         };
-        return colors[genre] || 'bg-gray-100 text-gray-800';
+        return colors[genre] || 'bg-gray-100 text-gray-800'; // Color por defecto
     };
 
     return (
