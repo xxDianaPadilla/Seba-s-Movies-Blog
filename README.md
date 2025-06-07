@@ -115,17 +115,8 @@ npm run lint
     <li><strong>Home.jsx:</strong> Página de inicio con información del proyecto</li>
     <li><strong>Dashboard.jsx:</strong> Panel principal con la lista de películas y funcionalidades CRUD</li>
   </ul>
-
-  <h2 class="emoji">🤝 Contribución</h2>
-  <p>Si deseas contribuir al proyecto:</p>
-  <pre><code>Fork el repositorio
-Crea una nueva rama: git checkout -b feature/nueva-funcionalidad
-Realiza tus cambios y commitea: git commit -am 'Agrega nueva funcionalidad'
-Push a la rama: git push origin feature/nueva-funcionalidad
-Abre un Pull Request
   </code></pre>
 
   <h2 class="emoji">📄 Licencia</h2>
-  <p>Este proyecto está bajo la Licencia MIT. Consulta el archivo LICENSE para más detalles.</p>
 
   <p><strong>¡Disfruta organizando tu colección de películas! 🍿</strong></p>
