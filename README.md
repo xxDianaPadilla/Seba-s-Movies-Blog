@@ -117,6 +117,7 @@ npm run lint
   </ul>
   </code></pre>
 
-  <h2 class="emoji">💖 Contribución</h2>
+  <h2 class="emoji">📽 Multimedia</h2>
 
+  <a href="https://drive.google.com/file/d/1El7vO_7t0id_4_iXlZrxTnbpQfzQ3imR/view?usp=sharing" target="_blank">Link de vídeo sobre funcionalidades</a>
   <p><strong>¡Disfruta organizando tu colección de películas! 🍿</strong></p>
