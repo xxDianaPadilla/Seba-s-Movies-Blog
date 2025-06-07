@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { url } from "../../utils/apiUrl";
 
-const useMovies = () => {
+const useMovies = (notifications = null) => {
     const [movies, setMovies] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -40,9 +40,25 @@ const useMovies = () => {
 
             const newMovie = await response.json();
             setMovies(prevMovies => [...prevMovies, newMovie]);
+
+            if (notifications) {
+                notifications.showSuccess(
+                    '¡Película agregada!',
+                    `"${movieData.titulo}" se ha añadido a tu colección exitosamente.`
+                );
+            }
+
             return newMovie;
         } catch (error) {
             setError('Error adding movie: ', error);
+
+            if (notifications) {
+                notifications.showError(
+                    'Error al agregar película',
+                    `No se pudo agregar "${movieData.titulo}". Inténtalo de nuevo.`
+                );
+            }
+
             throw error;
         }
     };
@@ -67,15 +83,34 @@ const useMovies = () => {
                     movie.id === id ? updatedMovie : movie
                 )
             );
+
+            if (notifications) {
+                notifications.showEdit(
+                    '¡Película actualizada!',
+                    `Los cambios en "${movieData.titulo}" se han guardado correctamente.`
+                );
+            }
+
             return updatedMovie;
         } catch (error) {
             setError(error.message);
             console.error('Error updating movie:', error);
+
+            if (notifications) {
+                notifications.showError(
+                    'Error al actualizar película',
+                    `No se pudieron guardar los cambios en "${movieData.titulo}".`
+                );
+            }
+
             throw error;
         }
     };
 
     const deleteMovie = async (id) => {
+        const movieToDelete = movies.find(movie => movie.id === id);
+        const movieTitle = movieToDelete?.titulo || 'la película';
+
         try {
             const response = await fetch(`${url}/${id}`, {
                 method: 'DELETE',
@@ -86,9 +121,25 @@ const useMovies = () => {
             }
 
             setMovies(prevMovies => prevMovies.filter(movie => movie.id !== id));
+
+            if (notifications) {
+                notifications.showDelete(
+                    '¡Película eliminada!',
+                    `"${movieTitle}" se ha eliminado de tu colección.`
+                );
+            }
+
         } catch (error) {
             setError(error.message);
             console.error('Error deleting movie: ', error);
+
+            if (notifications) {
+                notifications.showError(
+                    'Error al eliminar película',
+                    `No se pudo eliminar "${movieTitle}". Inténtalo de nuevo.`
+                );
+            }
+            
             throw error;
         }
     };

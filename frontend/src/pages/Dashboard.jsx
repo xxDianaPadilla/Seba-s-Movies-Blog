@@ -2,11 +2,16 @@ import React, { useState } from "react";
 import { Plus, Film, Search, Filter, Loader, AlertCircle, RefreshCw } from "lucide-react";
 import MovieFormModal from "../components/MovieFormModal";
 import MovieCard from "../components/MovieCard";
+import NotificationContainer from "../components/NotificationItem";
 import useMovies from "../hooks/movies/useMovies";
+import useNotifications from "../hooks/movies/useNotifications";
 
 const Dashboard = () => {
 
-    const { movies, loading, error, addMovie, updateMovie, deleteMovie, refetchMovies } = useMovies();
+    const notifications = useNotifications();
+
+    const { movies, loading, error, addMovie, updateMovie, deleteMovie, refetchMovies } = useMovies(notifications);
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingMovie, setEditingMovie] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
@@ -53,6 +58,8 @@ const Dashboard = () => {
             } else {
                 await addMovie(formData);
             }
+            setIsModalOpen(false);
+            setEditingMovie(null);
         } catch (error) {
             console.error('Error en el formulario: ', error);
         }
@@ -226,6 +233,12 @@ const Dashboard = () => {
                 }}
                 onSubmit={handleFormSubmit}
                 editingMovie={editingMovie}
+            />
+
+            {/* Contenedor de Notificaciones */}
+            <NotificationContainer
+                notifications={notifications.notifications}
+                onRemove={notifications.removeNotification}
             />
         </div>
     );
