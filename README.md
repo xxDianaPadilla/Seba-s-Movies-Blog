@@ -1,31 +1,3 @@
-<style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      margin: 2rem;
-      background-color: #f9f9f9;
-      color: #333;
-    }
-    h1, h2, h3 {
-      color: #4B0082;
-    }
-    code, pre {
-      background: #eee;
-      padding: 0.4rem;
-      border-radius: 4px;
-      display: block;
-      margin: 0.5rem 0;
-    }
-    ul {
-      margin-left: 1.5rem;
-    }
-    .emoji {
-      font-size: 1.2em;
-    }
-  </style>
-</head>
-<body>
-
   <h1>🎬 Seba's Movies Blog</h1>
   <p>Una aplicación web moderna y responsiva para el registro y gestión de películas, desarrollada con React.js.</p>
 
@@ -157,5 +129,3 @@ Abre un Pull Request
   <p>Este proyecto está bajo la Licencia MIT. Consulta el archivo LICENSE para más detalles.</p>
 
   <p><strong>¡Disfruta organizando tu colección de películas! 🍿</strong></p>
-
-</body>
