@@ -1,12 +1,22 @@
 import React from "react";
 import { useNavigate } from 'react-router-dom';
 import { Film, Star, Play, ArrowRight, Popcorn, Calendar, BookOpen } from 'lucide-react';
+import { useDashboardAccess } from "../context/AuthContext";
 
 const WelcomeCard = () => {
     const navigate = useNavigate();
+    const { allowDashboardAccess, revokeDashboardAccess } = useDashboardAccess();
+
+    React.useEffect(() => {
+        revokeDashboardAccess();
+    }, []);
 
     const handleNavigateToDashboard = () => {
-        navigate('/dashboard');
+        allowDashboardAccess();
+        // Usar setTimeout para asegurar que el estado se actualice antes de navegar
+        setTimeout(() => {
+            navigate('/dashboard');
+        }, 0);
     };
 
     return (
